@@ -1,7 +1,6 @@
 from lista import lista 
 import random
 
-
 def crearproceso ():
     cantprocesos = 5 #podemos preguntarle al usuario
     procesos = lista ()  
@@ -14,21 +13,21 @@ def crearproceso ():
         }
         procesos.insert(proceso)
 
-
 def crearparticiones ():
+    tamanos = [100,250,120,60]
     particiones = lista ()
     acum = 0
-    for i in range (1,5):
-        if i == 1: 
+    for i in range (4):
+        if i == 0: 
             particion = { 
                 'id': i,
-                'tamano': 100,
+                'tamano': tamanos[i],
                 'dirInicio': 0
             }
         else:   
             particion = {
                 'id': i, 
-                'tamano': ,
+                'tamano': tamanos[i] ,
                 'fragmentacion':0,
                 'idproc': None,
                 'dirInicio': acum,
@@ -37,3 +36,6 @@ def crearparticiones ():
         acum += (particion['tamano']+1)
         particiones.insert(particion)
     particiones.imprimir()
+
+
+crearparticiones()
