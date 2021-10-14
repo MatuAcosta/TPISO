@@ -17,8 +17,6 @@ for i in range (1,5):
             'tamano': random.randint(1,250),
             'fragmentacion':0,
             'idproc': None,
-            'ta': i,
-            'ti': i+1,
             'dirInicio': acum,
             'estado': ''
         }
