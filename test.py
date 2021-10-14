@@ -1,8 +1,6 @@
 from lista import lista 
-from nodo import nodo 
 
-procesos = []
-list = lista ()
+procesos = lista ()
 
 for i in range (1,10):
     proceso = {
@@ -11,10 +9,7 @@ for i in range (1,10):
         'ta': i,
         'ti': i+1
     }
-    procesos.append(proceso)
-
-for proceso in procesos: 
-    list.insert(proceso)
+    procesos.insert(proceso)
 
 
-list.imprimir()
+procesos.imprimir()
