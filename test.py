@@ -2,7 +2,7 @@ from lista import lista
 import random
 
 particiones = lista ()
-acum = 1
+acum = 0
 
 for i in range (1,5):
     if i == 1: 
@@ -20,7 +20,7 @@ for i in range (1,5):
             'dirInicio': acum,
             'estado': ''
         }
-    acum += particion['tamano']
+    acum += (particion['tamano']+1)
     particiones.insert(particion)
 
 particiones.imprimir()
