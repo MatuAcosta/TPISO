@@ -1,12 +1,20 @@
 from lista import lista 
 from nodo import nodo 
 
+procesos = []
 list = lista ()
 
-list.insert(nodo(1))
-list.insert(nodo(2))
-list.insert(nodo(3))
-list.insert(nodo(4))
-list.insert(nodo(5))
+for i in range (1,10):
+    proceso = {
+        'id': i, 
+        'tamano': 150,
+        'ta': i,
+        'ti': i+1
+    }
+    procesos.append(proceso)
+
+for proceso in procesos: 
+    list.insert(proceso)
+
 
 list.imprimir()
