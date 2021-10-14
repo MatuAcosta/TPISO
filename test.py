@@ -1,10 +1,9 @@
 from lista import lista 
 import random
 
-def crearproceso ():
-    cantprocesos = 5 #podemos preguntarle al usuario
+def crearprocesos (cant):
     procesos = lista ()  
-    for i in range (cantprocesos):
+    for i in range (cant):
         proceso = { 
             'id': i,
             'tamano': random.randint(1,250), #podemos preguntar al usuario
@@ -12,6 +11,9 @@ def crearproceso ():
             'ti':  random.randint(1,250) #podemos preguntar
         }
         procesos.insert(proceso)
+    procesos.imprimir()
+
+crearprocesos(5)
 
 def crearparticiones ():
     tamanos = [100,250,120,60]
