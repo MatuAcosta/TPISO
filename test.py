@@ -1,15 +1,20 @@
 from lista import lista 
 import random
 
-procesos = lista ()
+particiones = lista ()
+
 
 for i in range (1,10):
-    proceso = {
+    particion = {
         'id': i, 
         'tamano': random.randint(1,250),
+        'fragmentacion':0,
+        'idproc': None,
         'ta': i,
-        'ti': i+1
+        'ti': i+1,
+        'dirInicio': 0,
+        'estado': ''
     }
-    procesos.insert(proceso)
+    particiones.insert(particion)
 
-procesos.imprimir()
+particiones.imprimir()
