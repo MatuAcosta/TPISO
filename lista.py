@@ -17,6 +17,6 @@ class lista:
     def imprimir(self):
         node = self.head
         while node != None:
-            print( node.data, end= '-->')            
+            print( node.data)            
             node = node.next
         print('Null')

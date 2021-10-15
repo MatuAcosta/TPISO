@@ -13,7 +13,6 @@ def crearprocesos (cant):
         procesos.insert(proceso)
     procesos.imprimir()
 
-crearprocesos(5)
 
 def crearparticiones ():
     tamanos = [100,250,120,60]
@@ -39,5 +38,5 @@ def crearparticiones ():
         particiones.insert(particion)
     particiones.imprimir()
 
-
-crearparticiones()
+crearprocesos(5)
+#crearparticiones()
