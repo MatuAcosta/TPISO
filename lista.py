@@ -20,3 +20,5 @@ class lista:
             print( node.data)            
             node = node.next
         print('Null')
+
+#Giiiiil
