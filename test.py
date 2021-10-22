@@ -2,17 +2,19 @@ from lista import lista
 import random
 
 def crearprocesos (cant):
-    procesos = lista ()  
+    procesos = lista() 
     for i in range (cant):
         proceso = { 
             'id': i,
-            'tamano': random.randint(1,250), #podemos preguntar al usuario
-            'ta':  random.randint(1,250), #podemos preguntar
-            'ti':  random.randint(1,250) #podemos preguntar
+            'tamano': preguntar('tamaño'),# random.randint(1,250), #podemos preguntar al usuario
+            'ta':  preguntar('Tiempo de Arribo'), #podemos preguntar
+            'ti':  preguntar('Tiempo de Irrupcion') #podemos preguntar
         }
         procesos.insert(proceso)
     procesos.imprimir()
 
+def preguntar(atrib):
+        return int(input(f"Ingrese {atrib} de proceso: "))
 
 def crearparticiones ():
     tamanos = [100,250,120,60]
