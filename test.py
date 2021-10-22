@@ -1,15 +1,13 @@
-from lista import lista 
+from lista import lista
+from particion import Particion 
+from proceso import Proceso
+from memoria import Memoria
 import random
 
 def crearprocesos (cant):
     procesos = lista() 
     for i in range (cant):
-        proceso = { 
-            'id': i,
-            'tamano': preguntar('tamaño'),# random.randint(1,250), #podemos preguntar al usuario
-            'ta':  preguntar('Tiempo de Arribo'), #podemos preguntar
-            'ti':  preguntar('Tiempo de Irrupcion') #podemos preguntar
-        }
+        proceso = Proceso(i, preguntar("tamano"), preguntar("ta"), preguntar("ti"))
         procesos.insert(proceso)
     procesos.imprimir()
     return procesos
@@ -17,32 +15,11 @@ def crearprocesos (cant):
 def preguntar(atrib):
         return int(input(f"Ingrese {atrib} de proceso: "))
 
-def crearparticiones ():
-    tamanos = [100,250,120,60]
-    particiones = lista ()
-    acum = 0
-    for i in range (4):
-        if i == 0: 
-            particion = { 
-                'id': i,
-                'tamano': tamanos[i],
-                'dirInicio': 0
-            }
-        else:   
-            particion = {
-                'id': i, 
-                'tamano': tamanos[i] ,
-                'fragmentacion':0,
-                'idproc': None,
-                'dirInicio': acum,
-                'estado': ''
-            }
-        acum += (particion['tamano']+1)
-        particiones.insert(particion)
-    particiones.imprimir()
-    return particiones
 
 
+
+memoria = Memoria()
+memoria.crearParticiones()
 #procesos = crearprocesos(5)
 #particiones = crearparticiones()
 
@@ -56,5 +33,5 @@ def crearparticiones ():
 
 
 
-#crearprocesos(5)
+#crearprocesos(2)
 #crearparticiones()

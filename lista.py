@@ -21,3 +21,4 @@ class lista:
             node = node.next
         print('Null')
 
+
