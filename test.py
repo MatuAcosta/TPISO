@@ -12,6 +12,7 @@ def crearprocesos (cant):
         }
         procesos.insert(proceso)
     procesos.imprimir()
+    return procesos
 
 def preguntar(atrib):
         return int(input(f"Ingrese {atrib} de proceso: "))
@@ -39,6 +40,21 @@ def crearparticiones ():
         acum += (particion['tamano']+1)
         particiones.insert(particion)
     particiones.imprimir()
+    return particiones
 
-crearprocesos(5)
+
+#procesos = crearprocesos(5)
+#particiones = crearparticiones()
+
+# def asignarProcesos():
+#     particiones = crearparticiones()
+#     procesos = crearprocesos(5)
+#     while particiones:
+#         print(particiones.data)
+#         particiones = particiones.next
+
+
+
+
+#crearprocesos(5)
 #crearparticiones()
