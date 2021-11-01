@@ -18,21 +18,21 @@ class memoriaSec:
             print (proceso.id)
     
 
+#---------PRUEBA-------
+#disco = memoriaSec ()
+#for x in range (5): 
+#    proceso = Proceso (x,100,2,x+1)
+#    disco.agregarProceso(proceso)
 
-disco = memoriaSec ()
-for x in range (5): 
-    proceso = Proceso (x,100,2,x+1)
-    disco.agregarProceso(proceso)
+#disco.mostrarDisco()
+#ti = 10000
+#proc = disco.getProcesos()
 
-disco.mostrarDisco()
-ti = 10000
-proc = disco.getProcesos()
+#eliminar = None
+#for proceso in proc: 
+#    if (ti>proceso.ti): 
+#        ti = proceso.ti
+#        eliminar = proceso
 
-eliminar = None
-for proceso in proc: 
-    if (ti>proceso.ti): 
-        ti = proceso.ti
-        eliminar = proceso
-
-disco.quitarProceso(eliminar)
-disco.mostrarDisco()
+#disco.quitarProceso(eliminar)
+#disco.mostrarDisco()
