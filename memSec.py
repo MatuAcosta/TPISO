@@ -3,7 +3,7 @@ class memoriaSec:
     def __init__(self):
         self.procSusp = []
 
-    def getProcesos (self):
+    def getProcesosSusp (self):
         return self.procSusp
 
     def agregarProceso(self,proceso):
@@ -26,7 +26,7 @@ class memoriaSec:
 
 #disco.mostrarDisco()
 #ti = 10000
-#proc = disco.getProcesos()
+#proc = disco.getProcesosSusp()
 
 #eliminar = None
 #for proceso in proc: 
