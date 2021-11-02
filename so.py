@@ -79,8 +79,13 @@ class SistemaOperativo():
             print(proceso.getData())
 
     def srtf(self):
-        if (self.cpu.proceso == None):
-            self.cpu.cargarProceso(self.cola_listos[0])
+        if (self.cpu.proceso == None and self.memoria.cola_listos):
+            self.cpu.cargarProceso(self.memoria.cola_listos[0])
+        elif(self.memoria.cola_listos):
+            if(self.cpu.proceso.ti > self.memoria.cola_listos[0]):
+                self.cpu.quitarProceso()
+                self.cpu.cargarProceso(self.memoria.cola_listos[0])
+            
 
     def mostrarCpu(self):
         print(self.cpu.getData())
@@ -98,5 +103,5 @@ print('-' * 50)
 so.mostrarListos()
 print('-' * 50)
 memoria.mostrarParticiones()
-
-
+so.srtf()
+so.mostrarCpu()
