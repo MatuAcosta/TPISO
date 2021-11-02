@@ -1,4 +1,4 @@
-
+from proceso import Proceso
 class Particion:
     def __init__(self, id, tamano, dirInicio, fragmentacion, estado = 'Libre'):
         self.id = id
@@ -12,7 +12,7 @@ class Particion:
         self.proceso = proceso
         self.fragmentacion = self.tamano - proceso.getTamaño()
         self.estado= 'Ocupado'
-        self.proceso.estado = "listo"
+        self.proceso.estado = "Listo"
 
     def getTamaño(self):
         return self.tamano

@@ -8,7 +8,7 @@ def preguntar(atrib):
         return int(input(f"Ingrese {atrib} de proceso: "))
 
 filename = 'files/procesos.txt'
-class SistemaOperativo():
+class SistemaOperativo ():
     #Inicializar variables del Sistema Operativo
     def __init__(self):  
         self.memoria = Memoria()
@@ -62,7 +62,7 @@ class SistemaOperativo():
                         carga = True
                 i+=1
             if not entro:
-                self.cargarDisco(proceso) #
+                self.cargarDisco(proceso) 
             else:
                 self.cola_nuevos.remove(proceso)
                 particiones[pos].cargarProceso(proceso)
@@ -72,7 +72,43 @@ class SistemaOperativo():
         
    
     def cargarDisco(self, proceso):
-        self.disco.agregarProceso(proceso)
+        if (len(self.disco.procSusp) < 7):
+            self.disco.agregarProceso(proceso)
+
+        if (self.swap (proceso,'Listo')):
+            self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
+            if (proceso == self.memoria.cola_listos[0]):
+                pass
+                #srtf()
+        else:
+            if (self.swap(proceso,'Ejecucion')):
+                pass
+                #srtf()
+
+    def swap (self,proceso,estado):
+        i=0
+        pos = None 
+        particiones = self.memoria.particiones
+        for particion in particiones: 
+            if particion.estado == 'Ocupado':
+                if particion.tamano >= proceso.tamano :
+                    if particion.proceso.estado == estado:
+                        if particion.proceso.ti > proceso.ti:
+                            pos = i
+            i+=1          
+        if pos: 
+            fuera = self.memoria.particiones[pos].proceso
+            if estado == 'Listo':
+                for proc in self.memoria.cola_listos: 
+                    if fuera == proc :
+                        self.memoria.cola_listos.remove(fuera)
+                        self.memoria.cola_listos.append(proceso)
+            self.disco.agregarProceso(fuera)
+            self.disco.quitarProceso(proceso)
+            particiones[pos].cargarProceso(proceso) 
+            return True
+        else:
+            return False
 
     def mostrarListos(self):
         for proceso in self.memoria.cola_listos:
@@ -89,6 +125,9 @@ class SistemaOperativo():
 
     def mostrarCpu(self):
         print(self.cpu.getData())
+
+    
+
 
 so = SistemaOperativo()
 memoria = so.memoria
