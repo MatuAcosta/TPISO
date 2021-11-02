@@ -8,7 +8,7 @@ class Memoria():
     def crearParticiones(self):
         particiones = []
         tamanos = [100,250,120,60]
-        acum = 0
+        acum = 101
         particion = Particion(0, tamanos[0], 0, 0, 'Ocupado por SO')
         particiones.append(particion)
         for i in range (1,4):

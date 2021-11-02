@@ -4,6 +4,7 @@ class Proceso():
         self.tamano = tamano
         self.ta = ta
         self.ti = ti
+
     
     def getId(self):
         return self.id

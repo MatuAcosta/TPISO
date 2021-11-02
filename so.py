@@ -6,6 +6,7 @@ from memoria import Memoria
 def preguntar(atrib):
         return int(input(f"Ingrese {atrib} de proceso: "))
 
+filename = 'files/procesos.txt'
 class SistemaOperativo():
     def __init__(self):  
         self.memoria = Memoria()
@@ -13,11 +14,16 @@ class SistemaOperativo():
         self.procesos = []
         self.cola_listos = []
         self.cola_nuevos = []
-        self.instante = 0    
+        self.instante = 0 
 
+    # Creacion de procesos donde sus atributos son leidos desde un archivo
     def crearprocesos(self):
-        for i in range (2):
-            proceso = Proceso(i, preguntar("tamano"), preguntar("ta"), preguntar("ti"))
+        with open(filename) as f_obj:
+            lines = f_obj.readlines()
+        for line in lines:
+            line = line.strip()
+            line = line.split(' ')
+            proceso = Proceso(int(line[0]),int(line[1]),int(line[2]),int(line[3]))
             self.procesos.append(proceso)
 
     def mostrarProcesos(self):
@@ -35,16 +41,15 @@ class SistemaOperativo():
 
     def bestFit(self):
         particiones = self.memoria.particiones
-        minfrag = 1000
         pos = 0
-        
         for proceso in self.cola_nuevos:  
             entro = False
             i = 0  
+            minfrag = 250
             for particion in particiones:
-                if (particion.proceso == None) and (proceso.getTamaño() < particion.getTamaño()):
+                if (particion.proceso == None) and (proceso.getTamaño() <= particion.getTamaño() and i != 0):
                     if particion.getTamaño() - proceso.getTamaño() < minfrag:
-                        minfrag = particion.getTamaño() - proceso.getTamaño() < minfrag
+                        minfrag = particion.getTamaño() - proceso.getTamaño() 
                         pos = i
                         entro = True
                 i+=1
@@ -53,9 +58,15 @@ class SistemaOperativo():
             else:
                 particiones[pos].cargarProceso(proceso)
                 self.cola_listos.append(proceso)
+        self.cola_listos = sorted (self.cola_listos, key = lambda proc: proc.ti)       
+                
 
     def cargarDisco(self, proceso):
         pass
+
+    def colaListo(self):
+        for proceso in self.cola_listos:
+            print(proceso.getData())
 
 
 prueba = SistemaOperativo()
@@ -67,4 +78,10 @@ prueba.crearprocesos()
 prueba.cargarNuevos()
 prueba.bestFit()
 prueba.mostrarNuevos()
+print('-' * 50)
+prueba.mostrarProcesos()
+print('-' * 50)
+memoria.mostrarParticiones()
+print('-' * 50)
+prueba.colaListo()
 
