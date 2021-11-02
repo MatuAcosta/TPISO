@@ -1,4 +1,4 @@
-
+from proceso import Proceso
 from particion import Particion
 
 class Memoria():
@@ -10,7 +10,7 @@ class Memoria():
         particiones = []
         tamanos = [100,250,120,60]
         acum = 101
-        particion = Particion(0, tamanos[0], 0, 0, 'Ocupado por SO')
+        particion = Particion(0, tamanos[0], 0, 0, 'Ocupado')
         particiones.append(particion)
         for i in range (1,4):
             particion = Particion(i, tamanos[i], acum, 0)
