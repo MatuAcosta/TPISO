@@ -11,7 +11,7 @@ class Particion:
     def cargarProceso(self, proceso):
         self.proceso = proceso
         self.fragmentacion = self.tamano - proceso.getTamaño()
-        self.proces
+        self.proceso.estado = "listo"
 
     def getTamaño(self):
         return self.tamano

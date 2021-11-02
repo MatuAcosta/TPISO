@@ -7,8 +7,8 @@ class memoriaSec:
         return self.procSusp
 
     def agregarProceso(self,proceso):
+        self.proceso.estado = "suspendido"
         self.procSusp.append(proceso)
-        return self.procSusp
 
     def quitarProceso (self,proceso): 
         self.procSusp.remove(proceso)

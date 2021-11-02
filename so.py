@@ -1,4 +1,4 @@
-
+from memSec import memoriaSec
 from cpu import Cpu
 from particion import Particion 
 from proceso import Proceso
@@ -13,6 +13,7 @@ class SistemaOperativo():
     def __init__(self):  
         self.memoria = Memoria()
         self.cpu = Cpu()
+        self.disco = memoriaSec()
         self.multiprogramacion = 10
         self.procesos = []
         self.cola_listos = []
@@ -44,19 +45,17 @@ class SistemaOperativo():
             print(proceso.getData())
 
 
-    def cargarMemoria():
-        pass
     def bestFit(self):
         particiones = self.memoria.particiones
         pos = 0
-        carga = False
+        carga = False #Se refiere a si se cargo almenos un proceso a memoria o no 
         nuevos = self.cola_nuevos
         for proceso in nuevos:  
-            entro = False
+            entro = False #Se refiere a si el proceso entro en memoria o no
             i = 0  
             minfrag = 250
             for particion in particiones:
-                if (particion.proceso == None) and (proceso.getTamaño() <= particion.getTamaño() and i != 0):
+                if (particion.proceso == None) and proceso.getTamaño() <= particion.getTamaño() and i != 0:
                     if particion.getTamaño() - proceso.getTamaño() < minfrag:
                         minfrag = particion.getTamaño() - proceso.getTamaño() 
                         pos = i
@@ -64,18 +63,18 @@ class SistemaOperativo():
                         carga = True
                 i+=1
             if not entro:
-                self.cargarDisco(proceso)
+                self.cargarDisco(proceso) #
             else:
                 particiones[pos].cargarProceso(proceso)
-                proceso.estado = "listo"
                 self.cola_nuevos.remove(proceso)
+                self.cola_listos.append(proceso)
         if carga:
-            self.cola_listos = sorted (self.cola_listos, key = lambda proc: proc.ti)
+            self.cola_listos = sorted(self.cola_listos, key = lambda proc: proc.ti)
         else:
-            return 
+            return 0 
    
     def cargarDisco(self, proceso):
-        pass
+        self.disco.agregarProceso(proceso)
 
     def mostrarListos(self):
         for proceso in self.cola_listos:
