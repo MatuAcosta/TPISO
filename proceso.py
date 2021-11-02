@@ -7,6 +7,10 @@ class Proceso():
     
     def getId(self):
         return self.id
-    def __str__(self):
+    def getTamaño(self):
+        return self.tamano
+    def getTa(self):
+        return self.ta    
+    def getData(self):
         return  f'id: {str(self.id)} tamaño: {str(self.tamano)} ta: {str(self.ta)} ti: {self.ti}' 
-    
+

@@ -1,4 +1,4 @@
-from lista import lista
+
 from proceso import Proceso
 class Particion:
     def __init__(self, id, tamano, dirInicio, fragmentacion, estado = ''):
@@ -11,11 +11,12 @@ class Particion:
     
     def cargarProceso(self, proceso):
         self.proceso = proceso
+        self.estado = 'Listo'
 
-    def getTamano(self):
+    def getTamaño(self):
         return self.tamano
 
-    def __str__(self):
+    def getData(self):
         if self.proceso == None:
             return f"idParticion: {self.id} Tamaño: {self.tamano}, dirInicio: {self.dirInicio}, Fragmentacion: {self.fragmentacion}, estado: {self.estado}, idProceso: Vacio"
         else:
