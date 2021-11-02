@@ -4,8 +4,10 @@ class Proceso():
         self.tamano = tamano
         self.ta = ta
         self.ti = ti
+        self.estado = "nuevo"
 
-    
+    def getEstado(self):
+        return self.estado
     def getId(self):
         return self.id
     def getTamaño(self):

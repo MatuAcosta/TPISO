@@ -1,4 +1,5 @@
 
+from cpu import Cpu
 from particion import Particion 
 from proceso import Proceso
 from memoria import Memoria
@@ -8,13 +9,16 @@ def preguntar(atrib):
 
 filename = 'files/procesos.txt'
 class SistemaOperativo():
+    #Inicializar variables del Sistema Operativo
     def __init__(self):  
         self.memoria = Memoria()
+        self.cpu = Cpu()
         self.multiprogramacion = 10
         self.procesos = []
         self.cola_listos = []
         self.cola_nuevos = []
-        self.instante = 0 
+        self.instante = 0
+        
 
     # Creacion de procesos donde sus atributos son leidos desde un archivo
     def crearprocesos(self):
@@ -39,10 +43,15 @@ class SistemaOperativo():
         for proceso in self.cola_nuevos:
             print(proceso.getData())
 
+
+    def cargarMemoria():
+        pass
     def bestFit(self):
         particiones = self.memoria.particiones
         pos = 0
-        for proceso in self.cola_nuevos:  
+        carga = False
+        nuevos = self.cola_nuevos
+        for proceso in nuevos:  
             entro = False
             i = 0  
             minfrag = 250
@@ -52,36 +61,43 @@ class SistemaOperativo():
                         minfrag = particion.getTamaño() - proceso.getTamaño() 
                         pos = i
                         entro = True
+                        carga = True
                 i+=1
             if not entro:
                 self.cargarDisco(proceso)
             else:
                 particiones[pos].cargarProceso(proceso)
-                self.cola_listos.append(proceso)
-        self.cola_listos = sorted (self.cola_listos, key = lambda proc: proc.ti)       
-                
-
+                proceso.estado = "listo"
+                self.cola_nuevos.remove(proceso)
+        if carga:
+            self.cola_listos = sorted (self.cola_listos, key = lambda proc: proc.ti)
+        else:
+            return 
+   
     def cargarDisco(self, proceso):
         pass
 
-    def colaListo(self):
+    def mostrarListos(self):
         for proceso in self.cola_listos:
             print(proceso.getData())
 
+    def srtf(self):
+        if (self.cpu.proceso == None):
+            self.cpu.cargarProceso(self.cola_listos[0])
 
-prueba = SistemaOperativo()
-memoria = prueba.memoria
+    def mostrarCpu(self):
+        print(self.cpu.getData())
+
+so = SistemaOperativo()
+memoria = so.memoria
 memoria.crearParticiones()
-memoria.mostrarParticiones()
+so.crearprocesos()
+so.cargarNuevos()
+so.mostrarNuevos()
+so.bestFit()
 print('-' * 50)
-prueba.crearprocesos()
-prueba.cargarNuevos()
-prueba.bestFit()
-prueba.mostrarNuevos()
+so.mostrarNuevos()
 print('-' * 50)
-prueba.mostrarProcesos()
-print('-' * 50)
-memoria.mostrarParticiones()
-print('-' * 50)
-prueba.colaListo()
+so.colaListo()
+
 
