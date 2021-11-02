@@ -4,6 +4,7 @@ from particion import Particion
 class Memoria():
     def __init__(self):
         self.particiones = self.crearParticiones()
+        self.cola_listos = []
 
     def crearParticiones(self):
         particiones = []

@@ -16,7 +16,6 @@ class SistemaOperativo():
         self.disco = memoriaSec()
         self.multiprogramacion = 10
         self.procesos = []
-        self.cola_listos = []
         self.cola_nuevos = []
         self.instante = 0
         
@@ -49,7 +48,7 @@ class SistemaOperativo():
         particiones = self.memoria.particiones
         pos = 0
         carga = False #Se refiere a si se cargo almenos un proceso a memoria o no 
-        nuevos = self.cola_nuevos
+        nuevos = self.cola_nuevos.copy()
         for proceso in nuevos:  
             entro = False #Se refiere a si el proceso entro en memoria o no
             i = 0  
@@ -65,19 +64,18 @@ class SistemaOperativo():
             if not entro:
                 self.cargarDisco(proceso) #
             else:
-                particiones[pos].cargarProceso(proceso)
                 self.cola_nuevos.remove(proceso)
-                self.cola_listos.append(proceso)
+                particiones[pos].cargarProceso(proceso)
+                self.memoria.cola_listos.append(proceso)
         if carga:
-            self.cola_listos = sorted(self.cola_listos, key = lambda proc: proc.ti)
-        else:
-            return 0 
+            self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
+        
    
     def cargarDisco(self, proceso):
         self.disco.agregarProceso(proceso)
 
     def mostrarListos(self):
-        for proceso in self.cola_listos:
+        for proceso in self.memoria.cola_listos:
             print(proceso.getData())
 
     def srtf(self):
@@ -97,6 +95,8 @@ so.bestFit()
 print('-' * 50)
 so.mostrarNuevos()
 print('-' * 50)
-so.colaListo()
+so.mostrarListos()
+print('-' * 50)
+memoria.mostrarParticiones()
 
 
