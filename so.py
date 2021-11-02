@@ -21,17 +21,17 @@ class SistemaOperativo():
             self.procesos.append(proceso)
 
     def mostrarProcesos(self):
-        for i in self.procesos:
-            print(i.getData())
+        for proceso in self.procesos:
+            print(proceso.getData())
 
     def cargarNuevos(self):
-        for i in self.procesos:    
-            if self.instante == i.getTa:
-                self.cola_nuevos.append(i)
+        for proceso in self.procesos:    
+            if self.instante == proceso.getTa():
+                self.cola_nuevos.append(proceso)
 
     def mostrarNuevos(self):
-        for i in self.cola_nuevos:
-            print(i.getData())
+        for proceso in self.cola_nuevos:
+            print(proceso.getData())
 
     def bestFit(self):
         particiones = self.memoria.particiones
@@ -39,13 +39,15 @@ class SistemaOperativo():
         pos = 0
         
         for proceso in self.cola_nuevos:  
-            entro = False  
+            entro = False
+            i = 0  
             for particion in particiones:
                 if (particion.proceso == None) and (proceso.getTamaño() < particion.getTamaño()):
-                    if particion.getTamaño - proceso.getTamaño < minfrag:
-                        minfrag = particion.getTamaño - proceso.getTamaño < minfrag
-                        pos = particiones.index(proceso)
+                    if particion.getTamaño() - proceso.getTamaño() < minfrag:
+                        minfrag = particion.getTamaño() - proceso.getTamaño() < minfrag
+                        pos = i
                         entro = True
+                i+=1
             if not entro:
                 self.cargarDisco(proceso)
             else:
@@ -54,6 +56,8 @@ class SistemaOperativo():
 
     def cargarDisco(self, proceso):
         pass
+
+
 prueba = SistemaOperativo()
 memoria = prueba.memoria
 memoria.crearParticiones()
@@ -61,5 +65,6 @@ memoria.mostrarParticiones()
 print('-' * 50)
 prueba.crearprocesos()
 prueba.cargarNuevos()
-prueba.mostrarNuevos()
 prueba.bestFit()
+prueba.mostrarNuevos()
+
