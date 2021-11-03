@@ -53,19 +53,23 @@ class SistemaOperativo ():
             entro = False #Se refiere a si el proceso entro en memoria o no
             i = 0  
             minfrag = 250
+            #ALGORITMO BEST FIT
             for particion in particiones:
                 if (particion.proceso == None) and proceso.getTamaño() <= particion.getTamaño() and i != 0:
                     if particion.getTamaño() - proceso.getTamaño() < minfrag:
                         minfrag = particion.getTamaño() - proceso.getTamaño() 
                         pos = i
-                        entro = True
+                        entro = True 
                         carga = True
                 i+=1
             if not entro:
+                #si no entro a memoria el proceso se va a disco.
                 self.cargarDisco(proceso) 
             else:
                 particiones[pos].cargarProceso(proceso)
                 self.memoria.cola_listos.append(proceso)
+
+            #eliminamos el proceso de la cola de nuevos ya sea se agrego a memoria o a disco.
             self.cola_nuevos.remove(proceso)
         if carga:
             self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
@@ -76,6 +80,8 @@ class SistemaOperativo ():
             self.disco.agregarProceso(proceso)
             self.disco.mostrarDisco()
 
+
+        #esta funcion habria que ver si van aca porque estoy dudando.
         if (self.swap (proceso,'Listo')):
             self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
             if (proceso == self.memoria.cola_listos[0]):
