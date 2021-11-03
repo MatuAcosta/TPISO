@@ -64,9 +64,9 @@ class SistemaOperativo ():
             if not entro:
                 self.cargarDisco(proceso) 
             else:
-                self.cola_nuevos.remove(proceso)
                 particiones[pos].cargarProceso(proceso)
                 self.memoria.cola_listos.append(proceso)
+            self.cola_nuevos.remove(proceso)
         if carga:
             self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
         
