@@ -74,6 +74,7 @@ class SistemaOperativo ():
     def cargarDisco(self, proceso):
         if (len(self.disco.procSusp) < 7):
             self.disco.agregarProceso(proceso)
+            self.disco.mostrarDisco()
 
         if (self.swap (proceso,'Listo')):
             self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
@@ -86,15 +87,19 @@ class SistemaOperativo ():
                 #srtf()
 
     def swap (self,proceso,estado):
+        min = 250
         i=0
         pos = None 
         particiones = self.memoria.particiones
         for particion in particiones: 
-            if particion.estado == 'Ocupado':
-                if particion.tamano >= proceso.tamano :
-                    if particion.proceso.estado == estado:
-                        if particion.proceso.ti > proceso.ti:
-                            pos = i
+            if(particion.id != 0):
+                if particion.estado == 'Ocupado':
+                    if particion.tamano >= proceso.tamano:
+                        if particion.proceso.estado == estado:
+                            if particion.proceso.ti > proceso.ti and min > proceso.ti:
+                                pos = i
+                                min = proceso.ti
+
             i+=1          
         if pos: 
             fuera = self.memoria.particiones[pos].proceso
@@ -134,13 +139,17 @@ memoria = so.memoria
 memoria.crearParticiones()
 so.crearprocesos()
 so.cargarNuevos()
+print('-' * 50)
 so.mostrarNuevos()
 so.bestFit()
 print('-' * 50)
-so.mostrarNuevos()
+# so.mostrarNuevos()
+so.disco.mostrarDisco()
 print('-' * 50)
+print('Listos')
 so.mostrarListos()
 print('-' * 50)
 memoria.mostrarParticiones()
+print('-' * 50)
 so.srtf()
 so.mostrarCpu()
