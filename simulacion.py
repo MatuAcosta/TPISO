@@ -10,6 +10,7 @@ so = SistemaOperativo ()
 nuevos = so.cola_nuevos 
 listos = so.memoria.cola_listos
 disco = so.disco
+memoria = so.memoria
 
 def mostrarNuevos():
     for proceso in nuevos:
@@ -33,9 +34,24 @@ so.crearprocesos()
 while (reloj < 10):
     so.cargarNuevos()
     so.bestFit()
+    if so.cola_nuevos:
+        for proceso in so.cola_nuevos: 
+            so.planifMediano.cargarDisco(so.disco,proceso)
+    if so.disco.procSusp:
+        for proceso in so.disco.procSusp: 
+            if (so.planifMediano.swap (memoria,proceso,so.disco,'Listo')):
+                pass
+        else:
+            if (so.planifMediano.swap(memoria,proceso,so.disco,'Ejecucion')):
+                pass    
+        memoria.cola_listos = sorted(memoria.cola_listos, key = lambda proc: proc.ti)
     
+    so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
+    print ('Listos')
     mostrarListos() 
-    print ('reloj',reloj)
+    print ('EJECUTANDO')
+    so.mostrarCpu()
+    so.cpu.proceso.ti -=1
     reloj +=1
 
 

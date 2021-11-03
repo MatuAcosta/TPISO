@@ -1,6 +1,8 @@
 from memSec import memoriaSec
 from cpu import Cpu
-from particion import Particion 
+from particion import Particion
+from planifCortoplazo import planifCorto
+from planifMedianoPlazo import planifMediano 
 from proceso import Proceso
 from memoria import Memoria
 
@@ -14,12 +16,13 @@ class SistemaOperativo ():
         self.memoria = Memoria()
         self.cpu = Cpu()
         self.disco = memoriaSec()
+        self.planifCorto = planifCorto()
+        self.planifMediano = planifMediano ()
         self.multiprogramacion = 10
         self.procesos = []
         self.cola_nuevos = []
         self.instante = 0
         
-
     # Creacion de procesos donde sus atributos son leidos desde un archivo
     def crearprocesos(self):
         with open(filename) as f_obj:
@@ -62,77 +65,20 @@ class SistemaOperativo ():
                         entro = True 
                         carga = True
                 i+=1
-            if not entro:
-                #si no entro a memoria el proceso se va a disco.
-                self.cargarDisco(proceso) 
-            else:
+            if entro:
                 particiones[pos].cargarProceso(proceso)
                 self.memoria.cola_listos.append(proceso)
+                #eliminamos el proceso de la cola de nuevos si se agrego a memoria.
+                self.cola_nuevos.remove(proceso)
 
-            #eliminamos el proceso de la cola de nuevos ya sea se agrego a memoria o a disco.
-            self.cola_nuevos.remove(proceso)
-        if carga:
+        if self.memoria.cola_listos:
             self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
-        
-   
-    def cargarDisco(self, proceso):
-        if (len(self.disco.procSusp) < 7):
-            self.disco.agregarProceso(proceso)
-            self.disco.mostrarDisco()
-
-
-        #esta funcion habria que ver si van aca porque estoy dudando.
-        if (self.swap (proceso,'Listo')):
-            self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
-            if (proceso == self.memoria.cola_listos[0]):
-                pass
-                #srtf()
-        else:
-            if (self.swap(proceso,'Ejecucion')):
-                pass
-                #srtf()
-
-    def swap (self,proceso,estado):
-        min = 250
-        i=0
-        pos = None 
-        particiones = self.memoria.particiones
-        for particion in particiones: 
-            if(particion.id != 0):
-                if particion.estado == 'Ocupado':
-                    if particion.tamano >= proceso.tamano:
-                        if particion.proceso.estado == estado:
-                            if particion.proceso.ti > proceso.ti and min > proceso.ti:
-                                pos = i
-                                min = proceso.ti
-
-            i+=1          
-        if pos: 
-            fuera = self.memoria.particiones[pos].proceso
-            if estado == 'Listo':
-                for proc in self.memoria.cola_listos: 
-                    if fuera == proc :
-                        self.memoria.cola_listos.remove(fuera)
-                        self.memoria.cola_listos.append(proceso)
-            self.disco.agregarProceso(fuera)
-            self.disco.quitarProceso(proceso)
-            particiones[pos].cargarProceso(proceso) 
-            return True
-        else:
-            return False
+          
 
     def mostrarListos(self):
         for proceso in self.memoria.cola_listos:
             print(proceso.getData())
 
-    def srtf(self):
-        if (self.cpu.proceso == None and self.memoria.cola_listos):
-            self.cpu.cargarProceso(self.memoria.cola_listos[0])
-        elif(self.memoria.cola_listos):
-            if(self.cpu.proceso.ti > self.memoria.cola_listos[0]):
-                self.cpu.quitarProceso()
-                self.cpu.cargarProceso(self.memoria.cola_listos[0])
-            
 
     def mostrarCpu(self):
         print(self.cpu.getData())
@@ -144,10 +90,24 @@ so = SistemaOperativo()
 memoria = so.memoria
 memoria.crearParticiones()
 so.crearprocesos()
+
+##--SIMULADOR EN CADA INSTANTE DE TIEMPO
 so.cargarNuevos()
-print('-' * 50)
-so.mostrarNuevos()
 so.bestFit()
+for proceso in so.cola_nuevos: 
+    so.planifMediano.cargarDisco(so.disco,proceso)
+for proceso in so.disco.procSusp: 
+    if (so.planifMediano.swap (memoria,proceso,so.disco,'Listo')):
+            pass
+    else:
+        if (so.planifMediano.swap(memoria,proceso,so.disco,'Ejecucion')):
+            pass    
+    memoria.cola_listos = sorted(memoria.cola_listos, key = lambda proc: proc.ti)
+so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
+
+
+
+
 print('-' * 50)
 print('Disco')
 so.disco.mostrarDisco()
@@ -158,5 +118,14 @@ print('-' * 50)
 print('Particiones')
 memoria.mostrarParticiones()
 print('-' * 50)
-so.srtf()
 so.mostrarCpu()
+
+#Criterios de expropiación a tener en cuenta:
+#1. Si un proceso está en ejecución y se admite en la cola de listos, un proceso nuevo con mayor prioridad de ejecución,  entonces se saca al proceso actual de CPU, sin suspenderlo, y se le asigna la CPU al proceso con mayor prioridad.
+#2. En caso que el proceso con mayor prioridad haya ingresado a la cola de procesos listos y suspendidos, entonces podrá suspenderse un proceso ya asignado a memoria (utilizando swapout) para darle lugar en memoria al proceso con mayor prioridad. Para sacar un proceso de memoria, el criterio será el siguiente:
+#a- Primero se intentará suspender un proceso que no esté en CPU.
+#b- Si el proceso nuevo no cabe en ninguno de los bloques de los procesos que no están en CPU, y cabe en la partición del que está en la CPU, entonces se suspenderá al proceso que está CPU, para colocar el nuevo proceso (que tiene mayor prioridad) en su lugar de memoria.
+#c- Luego se le asignará la CPU al nuevo proceso de mayor prioridad, que ahora sí se encuentra en estado de Listo.
+#Luego se continúa con la ejecución del proceso nuevo, con mayor prioridad.
+#Deberán definir ademas el funcionamiento y controles del planificador a mediano plazo, que es el que decide cuándo y mediante qué controles el proceso suspendido vuelve a la memoria (y, por ende, a la cola de Listos)
+
