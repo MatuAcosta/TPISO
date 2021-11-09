@@ -35,22 +35,23 @@ so.crearprocesos()
 
 ## la simulacion ira hasta q las 3 colas esten vacias.
 #nuevos.len != 0 or listos.len !=0 or disco.len !=0 esta deberia ser la condicion de fin 
-
-while (reloj < 3):
+ban = True
+while (reloj < 10 or ban):
     so.cargarNuevos(reloj)
     so.planifLargo.bestFit(so.memoria, so.cola_nuevos)
-    if so.cola_nuevos:
-        for proceso in so.cola_nuevos: 
-            so.planifMediano.cargarDisco(so.disco,proceso, so.cola_nuevos)
-    # if so.disco.procSusp:
-    #     for proceso in so.disco.procSusp: 
-    #         swap = so.planifMediano.swap(so.memoria,proceso,so.disco,'Listo')
-    #         if not swap: 
-    #             so.planifMediano.swap(memoria,proceso,disco,'Ejecucion')
-    #     listos = sorted(listos, key = lambda proc: proc.ti)
-    so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
     print("NUEVOS")
     mostrarNuevos()
+    nuevos2 = so.cola_nuevos.copy()
+    if nuevos2:
+        for proceso in nuevos2: 
+            so.planifMediano.cargarDisco(so.disco,proceso, so.cola_nuevos)
+    # if so.disco.procSusp:
+    #      for proceso in so.disco.procSusp: 
+    #          swap = so.planifMediano.swap(so.memoria,proceso,so.disco,'Listo')
+    #          if not swap: 
+    #              so.planifMediano.swap(so.memoria,proceso,so.disco,'Ejecucion')
+    #      so.memoria.cola_listos = sorted(so.memoria.cola_listos, key = lambda proc: proc.ti)
+    so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
     print ('LISTOS')
     mostrarListos(so.memoria.cola_listos) 
     print ('EJECUTANDO')
@@ -60,7 +61,7 @@ while (reloj < 3):
     if so.cpu.proceso:
         so.cpu.proceso.ti -=1
     reloj +=1
-
+    ban = False
 
 
 #print('-' * 50)

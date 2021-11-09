@@ -6,8 +6,8 @@ class planifMediano:
     def cargarDisco(self,disco,proceso,nuevos):
         
         if (len(disco.procSusp) < 7):
-            nuevos.remove(proceso)
             disco.agregarProceso(proceso)
+            nuevos.remove(proceso)
             proceso.estado = "Suspendido"
             disco.procSusp = sorted(disco.procSusp, key = lambda proc: proc.ti)
 

@@ -4,10 +4,11 @@ class planifCorto:
         if cpu.proceso:
             if cpu.proceso.ti == 0:
                 cpu.quitarProceso()
-                listos.pop(0)
+                # listos.pop(0)
                 
         if (cpu.proceso == None and listos):
             cpu.cargarProceso(listos[0])
+            listos.pop(0)
 
         elif(listos):
             if(cpu.proceso.ti > listos[0].ti):
