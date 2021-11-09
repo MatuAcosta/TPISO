@@ -8,14 +8,10 @@ class memoriaSec:
 
     def agregarProceso(self,proceso):
         self.procSusp.append(proceso)
-        proceso.estado = 'Suspendido'
 
     def quitarProceso (self,proceso): 
         self.procSusp.remove(proceso)
 
-    def mostrarDisco (self):
-        for proceso in self.procSusp: 
-            print (proceso.id)
     
 
 #---------PRUEBA-------

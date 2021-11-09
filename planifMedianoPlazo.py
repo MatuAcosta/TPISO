@@ -1,8 +1,16 @@
+from types import prepare_class
+
+
 class planifMediano: 
 
-    def cargarDisco(self,disco,proceso):
+    def cargarDisco(self,disco,proceso,nuevos):
+        
         if (len(disco.procSusp) < 7):
+            nuevos.remove(proceso)
             disco.agregarProceso(proceso)
+            proceso.estado = "Suspendido"
+            disco.procSusp = sorted(disco.procSusp, key = lambda proc: proc.ti)
+
     def swap (self,memoria,proceso,disco,estado):
         min = 250
         i=0

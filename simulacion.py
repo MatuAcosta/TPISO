@@ -7,17 +7,14 @@ from memoria import Memoria
 
 reloj = 0 
 so = SistemaOperativo ()
-nuevos = so.cola_nuevos 
-listos = so.memoria.cola_listos
-disco = so.disco
-memoria = so.memoria
+
 
 def mostrarNuevos():
-    for proceso in nuevos:
+    for proceso in so.cola_nuevos:
         print(proceso.getData(),'instante:',reloj)
 
 def mostrarListos(listos):
-    for proceso in listos :
+    for proceso in so.memoria.cola_listos:
         print(proceso.getData(),'instante:',reloj)
 
 def mostrarProcesos():
@@ -27,6 +24,11 @@ def mostrarProcesos():
 def mostrarCpu():
         print(so.cpu.getData())
 
+def mostrarDisco():
+        mensaje = ""
+        for proceso in so.disco.procSusp: 
+            mensaje += str(proceso.id) + " "
+        print(mensaje)
 
 ## Comenzamos creando los procesos 
 so.crearprocesos()
@@ -34,25 +36,27 @@ so.crearprocesos()
 ## la simulacion ira hasta q las 3 colas esten vacias.
 #nuevos.len != 0 or listos.len !=0 or disco.len !=0 esta deberia ser la condicion de fin 
 
-while (reloj < 10):
+while (reloj < 3):
     so.cargarNuevos(reloj)
-    so.bestFit()
+    so.planifLargo.bestFit(so.memoria, so.cola_nuevos)
     if so.cola_nuevos:
         for proceso in so.cola_nuevos: 
-            so.planifMediano.cargarDisco(so.disco,proceso)
-    if so.disco.procSusp:
-        for proceso in so.disco.procSusp: 
-            swap = so.planifMediano.swap (memoria,proceso,so.disco,'Listo')
-            if not swap: 
-                so.planifMediano.swap(memoria,proceso,so.disco,'Ejecucion')
-
-        memoria.cola_listos = sorted(memoria.cola_listos, key = lambda proc: proc.ti)
-    
-    so.planifCorto.srtf(memoria.cola_listos,so.cpu)
-    print ('Listos')
-    mostrarListos(memoria.cola_listos) 
+            so.planifMediano.cargarDisco(so.disco,proceso, so.cola_nuevos)
+    # if so.disco.procSusp:
+    #     for proceso in so.disco.procSusp: 
+    #         swap = so.planifMediano.swap(so.memoria,proceso,so.disco,'Listo')
+    #         if not swap: 
+    #             so.planifMediano.swap(memoria,proceso,disco,'Ejecucion')
+    #     listos = sorted(listos, key = lambda proc: proc.ti)
+    so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
+    print("NUEVOS")
+    mostrarNuevos()
+    print ('LISTOS')
+    mostrarListos(so.memoria.cola_listos) 
     print ('EJECUTANDO')
     mostrarCpu()
+    print("SUSPENDIDOS")
+    mostrarDisco()
     if so.cpu.proceso:
         so.cpu.proceso.ti -=1
     reloj +=1

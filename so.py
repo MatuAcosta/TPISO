@@ -41,7 +41,8 @@ class SistemaOperativo ():
         for proceso in self.procesos:    
             if instante == proceso.getTa(): # Se pregunta si el instante es igual al tiempo de arribo del proceso
                 self.cola_nuevos.append(proceso)
-
+        self.cola_nuevos = sorted(self.cola_nuevos, key = lambda proc: proc.ti)
+        
     def mostrarNuevos(self):
         for proceso in self.cola_nuevos:
             print(proceso.getData())

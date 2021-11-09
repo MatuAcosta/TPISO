@@ -1,12 +1,8 @@
 class PlanifLargoPlazo:
 
-    def __init__(self):
-        pass
-
     def bestFit(self,memoria,colaNuevos):
         particiones = memoria.particiones
         pos = 0
-        carga = False #Se refiere a si se cargo almenos un proceso a memoria o no 
         nuevos = colaNuevos.copy()
         for proceso in nuevos:  
             entro = False #Se refiere a si el proceso entro en memoria o no
@@ -19,7 +15,6 @@ class PlanifLargoPlazo:
                         minfrag = particion.getTamaño() - proceso.getTamaño() 
                         pos = i
                         entro = True 
-                        carga = True
                 i+=1
             if entro:
                 particiones[pos].cargarProceso(proceso)

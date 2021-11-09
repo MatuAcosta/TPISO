@@ -4,6 +4,7 @@ class Cpu():
     
     def cargarProceso(self, proceso):
         self.proceso = proceso
+        proceso.estado = "Ejecutando"
     
     def quitarProceso(self):
         self.proceso = None
