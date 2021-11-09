@@ -1,6 +1,4 @@
 class planifMediano: 
-    def __init__(self):
-        pass
 
     def cargarDisco(self,disco,proceso):
         if (len(disco.procSusp) < 7):

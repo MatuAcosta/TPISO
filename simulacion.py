@@ -16,13 +16,16 @@ def mostrarNuevos():
     for proceso in nuevos:
         print(proceso.getData(),'instante:',reloj)
 
-def mostrarListos():
+def mostrarListos(listos):
     for proceso in listos :
         print(proceso.getData(),'instante:',reloj)
 
 def mostrarProcesos():
     for proceso in so.procesos:
         print(proceso.getData(),'instante:',reloj)
+
+def mostrarCpu():
+        print(so.cpu.getData())
 
 
 ## Comenzamos creando los procesos 
@@ -32,26 +35,26 @@ so.crearprocesos()
 #nuevos.len != 0 or listos.len !=0 or disco.len !=0 esta deberia ser la condicion de fin 
 
 while (reloj < 10):
-    so.cargarNuevos()
+    so.cargarNuevos(reloj)
     so.bestFit()
     if so.cola_nuevos:
         for proceso in so.cola_nuevos: 
             so.planifMediano.cargarDisco(so.disco,proceso)
     if so.disco.procSusp:
         for proceso in so.disco.procSusp: 
-            if (so.planifMediano.swap (memoria,proceso,so.disco,'Listo')):
-                pass
-        else:
-            if (so.planifMediano.swap(memoria,proceso,so.disco,'Ejecucion')):
-                pass    
+            swap = so.planifMediano.swap (memoria,proceso,so.disco,'Listo')
+            if not swap: 
+                so.planifMediano.swap(memoria,proceso,so.disco,'Ejecucion')
+
         memoria.cola_listos = sorted(memoria.cola_listos, key = lambda proc: proc.ti)
     
-    so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
+    so.planifCorto.srtf(memoria.cola_listos,so.cpu)
     print ('Listos')
-    mostrarListos() 
+    mostrarListos(memoria.cola_listos) 
     print ('EJECUTANDO')
-    so.mostrarCpu()
-    so.cpu.proceso.ti -=1
+    mostrarCpu()
+    if so.cpu.proceso:
+        so.cpu.proceso.ti -=1
     reloj +=1
 
 

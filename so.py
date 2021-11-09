@@ -21,7 +21,6 @@ class SistemaOperativo ():
         self.multiprogramacion = 10
         self.procesos = []
         self.cola_nuevos = []
-        self.instante = 0
         
     # Creacion de procesos donde sus atributos son leidos desde un archivo
     def crearprocesos(self):
@@ -33,24 +32,20 @@ class SistemaOperativo ():
             proceso = Proceso(int(line[0]),int(line[1]),int(line[2]),int(line[3]))
             self.procesos.append(proceso)
 
-    def mostrarProcesos(self):
-        for proceso in self.procesos:
-            print(proceso.getData())
+    # Mostrar datos del proceso por pantalla
 
-    def cargarNuevos(self):
+    # Cargar proceso a la cola de nuevos
+    def cargarNuevos(self, instante):
         for proceso in self.procesos:    
-            if self.instante == proceso.getTa():
+            if instante == proceso.getTa(): # Se pregunta si el instante es igual al tiempo de arribo del proceso
                 self.cola_nuevos.append(proceso)
 
-    def mostrarNuevos(self):
-        for proceso in self.cola_nuevos:
-            print(proceso.getData())
+    # Mostrar datos de procesos en la cola de nuevos
 
 
     def bestFit(self):
         particiones = self.memoria.particiones
         pos = 0
-        carga = False #Se refiere a si se cargo almenos un proceso a memoria o no 
         nuevos = self.cola_nuevos.copy()
         for proceso in nuevos:  
             entro = False #Se refiere a si el proceso entro en memoria o no
@@ -63,7 +58,7 @@ class SistemaOperativo ():
                         minfrag = particion.getTamaño() - proceso.getTamaño() 
                         pos = i
                         entro = True 
-                        carga = True
+                        
                 i+=1
             if entro:
                 particiones[pos].cargarProceso(proceso)
@@ -75,50 +70,45 @@ class SistemaOperativo ():
             self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
           
 
-    def mostrarListos(self):
-        for proceso in self.memoria.cola_listos:
-            print(proceso.getData())
 
-
-    def mostrarCpu(self):
-        print(self.cpu.getData())
+    
 
     
 
 
-so = SistemaOperativo()
-memoria = so.memoria
-memoria.crearParticiones()
-so.crearprocesos()
+# so = SistemaOperativo()
+# memoria = so.memoria
+# memoria.crearParticiones()
+# so.crearprocesos()
 
-##--SIMULADOR EN CADA INSTANTE DE TIEMPO
-so.cargarNuevos()
-so.bestFit()
-for proceso in so.cola_nuevos: 
-    so.planifMediano.cargarDisco(so.disco,proceso)
-for proceso in so.disco.procSusp: 
-    if (so.planifMediano.swap (memoria,proceso,so.disco,'Listo')):
-            pass
-    else:
-        if (so.planifMediano.swap(memoria,proceso,so.disco,'Ejecucion')):
-            pass    
-    memoria.cola_listos = sorted(memoria.cola_listos, key = lambda proc: proc.ti)
-so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
-
-
+# ##--SIMULADOR EN CADA INSTANTE DE TIEMPO
+# so.cargarNuevos()
+# so.bestFit()
+# for proceso in so.cola_nuevos: 
+#     so.planifMediano.cargarDisco(so.disco,proceso)
+# for proceso in so.disco.procSusp: 
+#     if (so.planifMediano.swap (memoria,proceso,so.disco,'Listo')):
+#             pass
+#     else:
+#         if (so.planifMediano.swap(memoria,proceso,so.disco,'Ejecucion')):
+#             pass    
+#     memoria.cola_listos = sorted(memoria.cola_listos, key = lambda proc: proc.ti)
+# so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
 
 
-print('-' * 50)
-print('Disco')
-so.disco.mostrarDisco()
-print('-' * 50)
-print('Listos')
-so.mostrarListos()
-print('-' * 50)
-print('Particiones')
-memoria.mostrarParticiones()
-print('-' * 50)
-so.mostrarCpu()
+
+
+# print('-' * 50)
+# print('Disco')
+# so.disco.mostrarDisco()
+# print('-' * 50)
+# print('Listos')
+# so.mostrarListos()
+# print('-' * 50)
+# print('Particiones')
+# memoria.mostrarParticiones()
+# print('-' * 50)
+# so.mostrarCpu()
 
 #Criterios de expropiación a tener en cuenta:
 #1. Si un proceso está en ejecución y se admite en la cola de listos, un proceso nuevo con mayor prioridad de ejecución,  entonces se saca al proceso actual de CPU, sin suspenderlo, y se le asigna la CPU al proceso con mayor prioridad.

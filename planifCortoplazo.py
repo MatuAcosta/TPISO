@@ -8,10 +8,11 @@ class planifCorto:
                 cpu.quitarProceso()
         if (cpu.proceso == None and listos):
             cpu.cargarProceso(listos[0])
+            listos.pop(0)
+            listos = sorted(listos, key = lambda proc: proc.ti)
         elif(listos):
             if(cpu.proceso.ti > listos[0].ti):
                 cpu.quitarProceso()
-                cpu.cargarProceso(listos[0])       
-        if listos:
-            listos.pop(0)
-            listos = sorted(listos, key = lambda proc: proc.ti)
+                cpu.cargarProceso(listos[0]) 
+                listos.pop(0)     
+                listos = sorted(listos, key = lambda proc: proc.ti) 
