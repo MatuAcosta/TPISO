@@ -5,6 +5,7 @@ from planifCortoplazo import planifCorto
 from planifMedianoPlazo import planifMediano 
 from proceso import Proceso
 from memoria import Memoria
+from planifLargoPlazo import PlanifLargoPlazo
 
 def preguntar(atrib):
         return int(input(f"Ingrese {atrib} de proceso: "))
@@ -18,6 +19,7 @@ class SistemaOperativo ():
         self.disco = memoriaSec()
         self.planifCorto = planifCorto()
         self.planifMediano = planifMediano ()
+        self.planifLargo = PlanifLargoPlazo()
         self.multiprogramacion = 10
         self.procesos = []
         self.cola_nuevos = []
@@ -40,36 +42,13 @@ class SistemaOperativo ():
             if instante == proceso.getTa(): # Se pregunta si el instante es igual al tiempo de arribo del proceso
                 self.cola_nuevos.append(proceso)
 
-    # Mostrar datos de procesos en la cola de nuevos
-
-
-    def bestFit(self):
-        particiones = self.memoria.particiones
-        pos = 0
-        nuevos = self.cola_nuevos.copy()
-        for proceso in nuevos:  
-            entro = False #Se refiere a si el proceso entro en memoria o no
-            i = 0  
-            minfrag = 250
-            #ALGORITMO BEST FIT
-            for particion in particiones:
-                if (particion.proceso == None) and proceso.getTamaño() <= particion.getTamaño() and i != 0:
-                    if particion.getTamaño() - proceso.getTamaño() < minfrag:
-                        minfrag = particion.getTamaño() - proceso.getTamaño() 
-                        pos = i
-                        entro = True 
-                        
-                i+=1
-            if entro:
-                particiones[pos].cargarProceso(proceso)
-                self.memoria.cola_listos.append(proceso)
-                #eliminamos el proceso de la cola de nuevos si se agrego a memoria.
-                self.cola_nuevos.remove(proceso)
-
-        if self.memoria.cola_listos:
-            self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
-          
-
+    def mostrarNuevos(self):
+        for proceso in self.cola_nuevos:
+            print(proceso.getData())
+            
+    def mostrarListos(self):
+        for proceso in self.memoria.cola_listos:
+            print(proceso.getData())
 
     
 
