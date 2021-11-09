@@ -5,6 +5,7 @@ from planifCortoplazo import planifCorto
 from planifMedianoPlazo import planifMediano 
 from proceso import Proceso
 from memoria import Memoria
+from planifLargoPlazo import PlanifLargoPlazo
 
 def preguntar(atrib):
         return int(input(f"Ingrese {atrib} de proceso: "))
@@ -18,6 +19,7 @@ class SistemaOperativo ():
         self.disco = memoriaSec()
         self.planifCorto = planifCorto()
         self.planifMediano = planifMediano ()
+        self.planifLargo = PlanifLargoPlazo()
         self.multiprogramacion = 10
         self.procesos = []
         self.cola_nuevos = []
@@ -45,36 +47,7 @@ class SistemaOperativo ():
     def mostrarNuevos(self):
         for proceso in self.cola_nuevos:
             print(proceso.getData())
-
-
-    def bestFit(self):
-        particiones = self.memoria.particiones
-        pos = 0
-        carga = False #Se refiere a si se cargo almenos un proceso a memoria o no 
-        nuevos = self.cola_nuevos.copy()
-        for proceso in nuevos:  
-            entro = False #Se refiere a si el proceso entro en memoria o no
-            i = 0  
-            minfrag = 250
-            #ALGORITMO BEST FIT
-            for particion in particiones:
-                if (particion.proceso == None) and proceso.getTamaño() <= particion.getTamaño() and i != 0:
-                    if particion.getTamaño() - proceso.getTamaño() < minfrag:
-                        minfrag = particion.getTamaño() - proceso.getTamaño() 
-                        pos = i
-                        entro = True 
-                        carga = True
-                i+=1
-            if entro:
-                particiones[pos].cargarProceso(proceso)
-                self.memoria.cola_listos.append(proceso)
-                #eliminamos el proceso de la cola de nuevos si se agrego a memoria.
-                self.cola_nuevos.remove(proceso)
-
-        if self.memoria.cola_listos:
-            self.memoria.cola_listos = sorted(self.memoria.cola_listos, key = lambda proc: proc.ti)
-          
-
+            
     def mostrarListos(self):
         for proceso in self.memoria.cola_listos:
             print(proceso.getData())
@@ -93,7 +66,7 @@ so.crearprocesos()
 
 ##--SIMULADOR EN CADA INSTANTE DE TIEMPO
 so.cargarNuevos()
-so.bestFit()
+so.planifLargo.bestFit(memoria,so.cola_nuevos)
 for proceso in so.cola_nuevos: 
     so.planifMediano.cargarDisco(so.disco,proceso)
 for proceso in so.disco.procSusp: 
