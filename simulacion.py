@@ -32,7 +32,7 @@ so.crearprocesos()
 #nuevos.len != 0 or listos.len !=0 or disco.len !=0 esta deberia ser la condicion de fin 
 ban = True
 while (reloj < 30 or ban):
-
+    
     #En cada instante nuevo verificamos si llegan procesos nuevos.
     so.cargarNuevos(reloj)
     print("---NUEVOS----")

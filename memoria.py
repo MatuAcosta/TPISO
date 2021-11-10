@@ -1,20 +1,24 @@
-from lista import lista
+from proceso import Proceso
 from particion import Particion
 
 class Memoria():
     def __init__(self):
-        pass
+        self.particiones = self.crearParticiones()
+        self.cola_listos = []
 
     def crearParticiones(self):
+        particiones = []
         tamanos = [100,250,120,60]
-        particiones = lista()
-        acum = 0
-        for i in range (4):
-            if i == 0: 
-                particion = Particion(i, tamanos[i], 0, 0, 'Ocupado por SO')
-            else:   
-                particion = Particion(i, tamanos[i], acum, 0)
-            acum += (particion.getTamano() + 1)
-            particiones.insert(particion)
-        particiones.imprimir()
+        acum = 101
+        particion = Particion(0, tamanos[0], 0, 0, 'Ocupado')
+        particiones.append(particion)
+        for i in range (1,4):
+            particion = Particion(i, tamanos[i], acum, 0)
+            acum += (particion.getTamaño() + 1)
+            particiones.append(particion)
         return particiones
+        
+    def mostrarParticiones(self):
+        for i in self.particiones:
+            print(i.getData())
+    
