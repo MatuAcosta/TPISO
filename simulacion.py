@@ -33,17 +33,28 @@ def mostrarDisco():
             mensaje += str(proceso.id) + " "
         print(mensaje)
 
+def mostrarEstado():
+    print ('\n----PROCESOS LISTOS----\n')
+    mostrarListos() 
+    print("\n----PROCESOS LISTOS Y SUSPENDIDOS----\n")
+    mostrarDisco()
+    print ('\n----PROCESO EJECUTANDO----\n')
+    mostrarCpu()
+    print ('\n----ESTADO DE PARTICIONES----\n')
+    so.memoria.mostrarParticiones()
+   
+    pass
 ## Comenzamos creando los procesos 
 so.crearprocesos()
 
 ## la simulacion ira hasta q las 3 colas esten vacias.
-#nuevos.len != 0 or listos.len !=0 or disco.len !=0 esta deberia ser la condicion de fin 
-ban = True
-while (reloj < 100 or ban):
+res = 's'
+so.cargarNuevos(reloj)
+while ((so.cola_nuevos or so.memoria.cola_listos or so.disco.procSusp or so.cpu.proceso) and res == 's'):
     
     #En cada instante nuevo verificamos si llegan procesos nuevos.
-    so.cargarNuevos(reloj)
-    print("---NUEVOS----")
+    print('\nINSTANTE: ',reloj,'\n')
+    print("\n---PROCESOS NUEVOS----\n")
     mostrarNuevos()
     #Luego realizamos el algoritmo bestfit para ubicar los procesos en memoria.
     so.planifLargo.bestFit(so.memoria, so.cola_nuevos)
@@ -53,13 +64,13 @@ while (reloj < 100 or ban):
     if nuevos2:
         for proceso in nuevos2: 
             so.planifMediano.cargarDisco(so.disco,proceso, so.cola_nuevos)
-    #DISMINUIMOS EN UNO EL TIEMPO DE IRRUPCION DEL PROCESO EN MEMORIA Y CONTROLAMOS SI TERMINA. 
     if so.disco.procSusp:
         for proceso in so.disco.procSusp: 
             swap = so.planifMediano.swap(so.memoria,proceso,so.disco,'Listo')
             if not swap: 
                 so.planifMediano.swap(so.memoria,proceso,so.disco,'Ejecucion')
         so.memoria.cola_listos = sorted(so.memoria.cola_listos, key = lambda proc: proc.ti) 
+    #DISMINUIMOS EN UNO EL TIEMPO DE IRRUPCION DEL PROCESO EN MEMORIA Y CONTROLAMOS SI TERMINA. 
     if so.cpu.proceso:
         so.cpu.proceso.ti -=1
         termino = so.planifCorto.terminaProceso(so.cpu)
@@ -73,25 +84,20 @@ while (reloj < 100 or ban):
         if particion.estado == 'Libre':
             if so.disco.procSusp:
                 proceso = so.disco.procSusp[0]
-                if proceso: #verificamos que el proceso que estaba en disco entre en la particion
+                    #verificamos que el proceso que estaba en disco entre en la particion
+                if proceso: 
                     if particion.tamano >= proceso.tamano:
                         so.planifMediano.quitar(so.disco)
                         particion.cargarProceso(proceso)
                         so.memoria.cola_listos.append(proceso)
                         so.memoria.cola_listos = sorted(so.memoria.cola_listos, key = lambda proc: proc.ti)
-
-
-
-    print ('----LISTOS----')
-    mostrarListos() 
-    print("----SUSPENDIDOS----")
-    mostrarDisco()
-    print ('--EJECUTANDO--')
-    mostrarCpu()
-    print ('--Particiones--')
-    so.memoria.mostrarParticiones()
+    mostrarEstado()
+    res = input('\nQuiere seguir? S --> SI O N--> NO:').lower()
+    while(res != 's'):
+        res = input('Ingrese nuevamente: S --> SI O N--> NO:').lower()
     reloj +=1
-    ban = False
+    so.cargarNuevos(reloj) 
+    
 
 
 
