@@ -13,6 +13,7 @@ class memoriaSec:
     def quitarProceso (self,proceso): 
         self.procSusp.remove(proceso)
 
+<<<<<<< Updated upstream
     def mostrarDisco (self):
         for proceso in self.procSusp: 
             print (proceso.id)
@@ -36,3 +37,6 @@ class memoriaSec:
 
 #disco.quitarProceso(eliminar)
 #disco.mostrarDisco()
+=======
+    
+>>>>>>> Stashed changes
