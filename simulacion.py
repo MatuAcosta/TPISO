@@ -1,7 +1,15 @@
+from memoria import Memoria
 from so import SistemaOperativo
+from memoria import Memoria
+from cpu import Cpu
+from memSec import memoriaSec
 
 reloj = 0 
-so = SistemaOperativo ()
+memoria = Memoria()
+cpu = Cpu()
+disco = memoriaSec()
+so = SistemaOperativo(memoria, disco, cpu)
+
 
 
 def mostrarNuevos():
@@ -31,7 +39,7 @@ so.crearprocesos()
 ## la simulacion ira hasta q las 3 colas esten vacias.
 #nuevos.len != 0 or listos.len !=0 or disco.len !=0 esta deberia ser la condicion de fin 
 ban = True
-while (reloj < 30 or ban):
+while (reloj < 100 or ban):
     
     #En cada instante nuevo verificamos si llegan procesos nuevos.
     so.cargarNuevos(reloj)

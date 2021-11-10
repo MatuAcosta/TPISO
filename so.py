@@ -13,10 +13,10 @@ def preguntar(atrib):
 filename = 'files/procesos.txt'
 class SistemaOperativo ():
     #Inicializar variables del Sistema Operativo
-    def __init__(self):  
-        self.memoria = Memoria()
-        self.cpu = Cpu()
-        self.disco = memoriaSec()
+    def __init__(self, memoria, disco, cpu):  
+        self.memoria = memoria
+        self.cpu = cpu
+        self.disco = disco
         self.planifCorto = planifCorto()
         self.planifMediano = planifMediano ()
         self.planifLargo = PlanifLargoPlazo()
