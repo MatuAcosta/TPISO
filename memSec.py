@@ -3,15 +3,19 @@ class memoriaSec:
     def __init__(self):
         self.procSusp = []
 
-    def getProcesosSusp (self):
+    def getProcesos (self):
         return self.procSusp
 
     def agregarProceso(self,proceso):
         self.procSusp.append(proceso)
+        return self.procSusp
 
     def quitarProceso (self,proceso): 
         self.procSusp.remove(proceso)
 
+    def mostrarDisco (self):
+        for proceso in self.procSusp: 
+            print (proceso.id)
     
 
 #---------PRUEBA-------
@@ -22,7 +26,7 @@ class memoriaSec:
 
 #disco.mostrarDisco()
 #ti = 10000
-#proc = disco.getProcesosSusp()
+#proc = disco.getProcesos()
 
 #eliminar = None
 #for proceso in proc: 

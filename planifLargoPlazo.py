@@ -24,3 +24,12 @@ class PlanifLargoPlazo:
 
         if memoria.cola_listos:
             memoria.cola_listos = sorted(memoria.cola_listos, key = lambda proc: proc.ti)
+
+    def quitarProceso (self,memoria,proceso):
+        particiones = memoria.particiones
+        for particion in particiones: 
+            if particion.proceso:
+                if proceso.id == particion.proceso.id: 
+                    particion.proceso = None
+                    particion.estado = 'Libre'
+                    particion.fragmentacion = 0 

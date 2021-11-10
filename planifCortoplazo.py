@@ -1,15 +1,18 @@
 class planifCorto: 
 
-    def srtf(self,listos,cpu):
+    def terminaProceso (self,cpu): 
         if cpu.proceso:
             if cpu.proceso.ti == 0:
+                proceso = cpu.proceso
                 cpu.quitarProceso()
-                # listos.pop(0)
-                
+                return proceso
+        return False
+
+
+    def srtf(self,listos,cpu):
         if (cpu.proceso == None and listos):
             cpu.cargarProceso(listos[0])
             listos.pop(0)
-
         elif(listos):
             if(cpu.proceso.ti > listos[0].ti):
                 cpu.quitarProceso()

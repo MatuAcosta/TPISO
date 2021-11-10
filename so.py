@@ -46,49 +46,9 @@ class SistemaOperativo ():
     def mostrarNuevos(self):
         for proceso in self.cola_nuevos:
             print(proceso.getData())
-            
-    def mostrarListos(self):
-        for proceso in self.memoria.cola_listos:
-            print(proceso.getData())
 
     
 
-    
-
-
-# so = SistemaOperativo()
-# memoria = so.memoria
-# memoria.crearParticiones()
-# so.crearprocesos()
-
-# ##--SIMULADOR EN CADA INSTANTE DE TIEMPO
-# so.cargarNuevos()
-# so.bestFit()
-# for proceso in so.cola_nuevos: 
-#     so.planifMediano.cargarDisco(so.disco,proceso)
-# for proceso in so.disco.procSusp: 
-#     if (so.planifMediano.swap (memoria,proceso,so.disco,'Listo')):
-#             pass
-#     else:
-#         if (so.planifMediano.swap(memoria,proceso,so.disco,'Ejecucion')):
-#             pass    
-#     memoria.cola_listos = sorted(memoria.cola_listos, key = lambda proc: proc.ti)
-# so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
-
-
-
-
-# print('-' * 50)
-# print('Disco')
-# so.disco.mostrarDisco()
-# print('-' * 50)
-# print('Listos')
-# so.mostrarListos()
-# print('-' * 50)
-# print('Particiones')
-# memoria.mostrarParticiones()
-# print('-' * 50)
-# so.mostrarCpu()
 
 #Criterios de expropiación a tener en cuenta:
 #1. Si un proceso está en ejecución y se admite en la cola de listos, un proceso nuevo con mayor prioridad de ejecución,  entonces se saca al proceso actual de CPU, sin suspenderlo, y se le asigna la CPU al proceso con mayor prioridad.
