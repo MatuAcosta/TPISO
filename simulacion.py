@@ -45,7 +45,13 @@ while (reloj < 30 or ban):
     if nuevos2:
         for proceso in nuevos2: 
             so.planifMediano.cargarDisco(so.disco,proceso, so.cola_nuevos)
-    #DISMINUIMOS EN UNO EL TIEMPO DE IRRUPCION DEL PROCESO EN MEMORIA Y CONTROLAMOS SI TERMINA.   
+    #DISMINUIMOS EN UNO EL TIEMPO DE IRRUPCION DEL PROCESO EN MEMORIA Y CONTROLAMOS SI TERMINA. 
+    if so.disco.procSusp:
+        for proceso in so.disco.procSusp: 
+            swap = so.planifMediano.swap(so.memoria,proceso,so.disco,'Listo')
+            if not swap: 
+                so.planifMediano.swap(so.memoria,proceso,so.disco,'Ejecucion')
+        so.memoria.cola_listos = sorted(so.memoria.cola_listos, key = lambda proc: proc.ti) 
     if so.cpu.proceso:
         so.cpu.proceso.ti -=1
         termino = so.planifCorto.terminaProceso(so.cpu)
@@ -81,9 +87,4 @@ while (reloj < 30 or ban):
 
 
 
-    #if so.disco.procSusp:
-    #    for proceso in so.disco.procSusp: 
-    #        swap = so.planifMediano.swap(so.memoria,proceso,so.disco,'Listo')
-    #        if not swap: 
-    #            so.planifMediano.swap(so.memoria,proceso,so.disco,'Ejecucion')
-    #    so.memoria.cola_listos = sorted(so.memoria.cola_listos, key = lambda proc: proc.ti)
+
