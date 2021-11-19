@@ -2,7 +2,7 @@ from types import prepare_class
 
 
 class planifMediano: 
-
+    
     def cargarDisco(self,disco,proceso,nuevos):
         if (len(disco.procSusp) < 7):
             disco.agregarProceso(proceso)

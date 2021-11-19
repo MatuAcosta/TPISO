@@ -143,7 +143,7 @@ def simulacion(reloj):
                             so.memoria.cola_listos = sorted(so.memoria.cola_listos, key = lambda proc: proc.ti)
         mostrarEstado()
         res = input('\nQuiere seguir? S --> SI O N--> NO:').lower()
-        while(res != 's'):
+        while(res != 's' and res != 'n'):
             res = input('Ingrese nuevamente: S --> SI O N--> NO:').lower()
         reloj +=1
         so.cargarNuevos(reloj) 
