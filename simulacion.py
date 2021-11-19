@@ -1,8 +1,10 @@
+from os import sep
 from memoria import Memoria
 from so import SistemaOperativo
 from memoria import Memoria
 from cpu import Cpu
 from memSec import memoriaSec
+from tabulate import tabulate
 
 reloj = 0 
 memoria = Memoria()
@@ -11,6 +13,27 @@ disco = memoriaSec()
 so = SistemaOperativo(memoria, disco, cpu)
 
 
+def menuInicial():
+        print(
+            """
+            --------------------------------------------------------------
+            SIMULADOR DE ASIGNACION DE MEMORIA Y PLANIFICACION DE PROCESOS
+            --------------------------------------------------------------
+            """
+        )
+        input("Enter para iniciar Simulacion...")
+
+def mostrarProcesosCreados():
+    print("******** PROCESO CREADOS ********\n")
+    cabecera = ['id', 'tamaño', 'TA', 'TI']
+    datos = []
+    for proceso in so.procesos:
+        datos.append([proceso.id, proceso.tamano, proceso.ta, proceso.ti])
+    print(tabulate(datos, headers=cabecera, tablefmt='grid', stralign='center'))
+    input("\nEnter para continuar")
+
+def separador():
+    print('\n','-'*155, '\n')
 
 def mostrarNuevos():
     for proceso in so.cola_nuevos:
@@ -43,9 +66,12 @@ def mostrarEstado():
     print ('\n----ESTADO DE PARTICIONES----\n')
     so.memoria.mostrarParticiones()
    
-    pass
+
 ## Comenzamos creando los procesos 
+menuInicial()
 so.crearprocesos()
+mostrarProcesosCreados()
+
 
 ## la simulacion ira hasta q las 3 colas esten vacias.
 res = 's'
@@ -53,8 +79,9 @@ so.cargarNuevos(reloj)
 while ((so.cola_nuevos or so.memoria.cola_listos or so.disco.procSusp or so.cpu.proceso) and res == 's'):
     
     #En cada instante nuevo verificamos si llegan procesos nuevos.
-    print('\nINSTANTE: ',reloj,'\n')
-    print("\n---PROCESOS NUEVOS----\n")
+    separador()
+    print('INSTANTE: ',reloj,'\n')
+    print("\n---PROCESOS NUEVOS----\n", '-')
     mostrarNuevos()
     #Luego realizamos el algoritmo bestfit para ubicar los procesos en memoria.
     so.planifLargo.bestFit(so.memoria, so.cola_nuevos)
