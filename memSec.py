@@ -13,10 +13,11 @@ class memoriaSec:
     def quitarProceso (self,proceso): 
         self.procSusp.remove(proceso)
 
-    def mostrarDisco (self):
-        for proceso in self.procSusp: 
-            print (proceso.id)
-    
+    def hayProceso(self):
+        if self.procSusp == []:
+            return False
+        else:
+            return True
 
 #---------PRUEBA-------
 #disco = memoriaSec ()

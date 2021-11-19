@@ -18,7 +18,5 @@ class Memoria():
             particiones.append(particion)
         return particiones
         
-    def mostrarParticiones(self):
-        for i in self.particiones:
-            print(i.getData())
+    
     

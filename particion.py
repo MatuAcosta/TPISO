@@ -17,8 +17,8 @@ class Particion:
     def getTamaño(self):
         return self.tamano
 
-    def getData(self):
+    def hayProceso(self):
         if self.proceso == None:
-            return f"idParticion: {self.id} Tamaño: {self.tamano}, dirInicio: {self.dirInicio}, Fragmentacion: {self.fragmentacion}, estado: {self.estado}, idProceso: Vacio"
+            return False
         else:
-            return f"idParticion: {self.id}, Tamaño: {self.tamano}, dirInicio: {self.dirInicio}, Fragmentacion: {self.fragmentacion}, estado: {self.estado}, idProceso: {self.proceso.getId()}"
+            return True
