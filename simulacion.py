@@ -93,7 +93,8 @@ def mostrarEstado():
 ## Comenzamos creando los procesos 
 
 def simulacion(reloj):
-
+    trp=0
+    tep = 0
     menuInicial()
     so.crearprocesos()
     mostrarProcesosCreados()
@@ -101,7 +102,6 @@ def simulacion(reloj):
     res = 's'
     so.cargarNuevos(reloj)
     while ((so.cola_nuevos or so.memoria.cola_listos or so.disco.procSusp or so.cpu.proceso) and res == 's'):
-        
         #En cada instante nuevo verificamos si llegan procesos nuevos.
         separador()
         print('INSTANTE: ',reloj,'\n')
@@ -125,6 +125,11 @@ def simulacion(reloj):
             so.cpu.proceso.ti -=1
             termino = so.planifCorto.terminaProceso(so.cpu)
             if termino:
+                Tr = termino.calcTR(reloj) 
+                tiorig = so.tiProcesos()
+                Te = Tr - tiorig[termino.id]  
+                tep += Te
+                trp += Tr
                 so.planifLargo.quitarProceso(so.memoria,termino) 
         #REALIZAMOS SRTF 
         so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
@@ -147,5 +152,11 @@ def simulacion(reloj):
             res = input('Ingrese nuevamente: S --> SI O N--> NO:').lower()
         reloj +=1
         so.cargarNuevos(reloj) 
+    
+    cantprocesos = so.cantProcesos()
+    trp = trp / cantprocesos
+    tep = tep / cantprocesos 
+    print('TIEMPO DE RETORNO PROMEDIO:' ,  trp) 
+    print ('TIEMPO DE ESPERA PROMEDIO: ', tep)
 
 simulacion(reloj)

@@ -17,3 +17,5 @@ class Proceso():
     def getData(self):
         return  f'id: {str(self.id)} tamaño: {str(self.tamano)} ta: {str(self.ta)} ti: {self.ti}' 
 
+    def calcTR(self,reloj):
+        return reloj - self.ta 

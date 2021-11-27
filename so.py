@@ -34,6 +34,20 @@ class SistemaOperativo ():
             proceso = Proceso(int(line[0]),int(line[1]),int(line[2]),int(line[3]))
             self.procesos.append(proceso)
 
+    def cantProcesos (self):
+        with open(filename) as f_obj:
+            lines = f_obj.readlines()
+        return len(lines)
+
+    def tiProcesos (self):
+        tiOrig = []
+        with open(filename) as f_obj:
+            lines = f_obj.readlines()
+        for line in lines:
+            line = line.strip()
+            line = line.split(' ')
+            tiOrig.append(int(line[3]))
+        return tiOrig
     # Mostrar datos del proceso por pantalla
 
     # Cargar proceso a la cola de nuevos
