@@ -15,6 +15,7 @@ class planifCorto:
             listos.pop(0)
         elif(listos):
             if(cpu.proceso.ti > listos[0].ti):
+                listos.append(cpu.proceso)
                 cpu.quitarProceso()
                 cpu.cargarProceso(listos[0])   
                 listos.pop(0)   

@@ -1,3 +1,4 @@
+import msvcrt
 from os import sep
 from memoria import Memoria
 from so import SistemaOperativo
@@ -68,7 +69,7 @@ def mostrarDisco():
     cabecera = ['id']
     datos = []
     for proceso in so.disco.procSusp: 
-        datos.append(str(proceso.id))
+            datos.append(str(proceso.id))
     print(tabulate(datos, headers=cabecera, tablefmt='grid', stralign='center'))
 
 def mostrarParticiones():
@@ -99,9 +100,8 @@ def simulacion(reloj):
     so.crearprocesos()
     mostrarProcesosCreados()
     ## la simulacion ira hasta q las 3 colas esten vacias.
-    res = 's'
     so.cargarNuevos(reloj)
-    while ((so.cola_nuevos or so.memoria.cola_listos or so.disco.procSusp or so.cpu.proceso) and res == 's'):
+    while ((so.cola_nuevos or so.memoria.cola_listos or so.disco.procSusp or so.cpu.proceso)):
         #En cada instante nuevo verificamos si llegan procesos nuevos.
         separador()
         print('INSTANTE: ',reloj,'\n')
@@ -135,21 +135,11 @@ def simulacion(reloj):
         so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
 
         #NOS FIJAMOS EN LAS PARTICIONES SI ALGUNA ESTA LIBRE, DE SER ASI MIRAMOS EL DISCO Y COLOCAMOS.
-        for particion in so.memoria.particiones: 
-            if particion.estado == 'Libre':
-                if so.disco.procSusp:
-                    proceso = so.disco.procSusp[0]
-                        #verificamos que el proceso que estaba en disco entre en la particion
-                    if proceso: 
-                        if particion.tamano >= proceso.tamano:
-                            so.planifMediano.quitar(so.disco)
-                            particion.cargarProceso(proceso)
-                            so.memoria.cola_listos.append(proceso)
-                            so.memoria.cola_listos = sorted(so.memoria.cola_listos, key = lambda proc: proc.ti)
+
+        so.planifMediano.partiLibres(so.memoria,so.disco)
+        so.planifCorto.srtf(so.memoria.cola_listos,so.cpu)
         mostrarEstado()
-        res = input('\nQuiere seguir? S --> SI O N--> NO:').lower()
-        while(res != 's' and res != 'n'):
-            res = input('Ingrese nuevamente: S --> SI O N--> NO:').lower()
+        input('\nPresione Enter para seguir')
         reloj +=1
         so.cargarNuevos(reloj) 
     
@@ -160,3 +150,4 @@ def simulacion(reloj):
     print ('TIEMPO DE ESPERA PROMEDIO: ', tep)
 
 simulacion(reloj)
+msvcrt.getch()

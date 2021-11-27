@@ -70,3 +70,4 @@ class SistemaOperativo ():
 #Luego se continúa con la ejecución del proceso nuevo, con mayor prioridad.
 #Deberán definir ademas el funcionamiento y controles del planificador a mediano plazo, que es el que decide cuándo y mediante qué controles el proceso suspendido vuelve a la memoria (y, por ende, a la cola de Listos)
 
+
